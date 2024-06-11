@@ -1,0 +1,31 @@
+image: node:14
+
+services:
+  - postgres:latest
+
+variables:
+  POSTGRES_DB: tododb
+  POSTGRES_USER: username
+  POSTGRES_PASSWORD: password
+  DATABASE_URL: postgres://username:password@postgres:5432/tododb
+
+stages:
+  - test
+  - deploy
+
+cache:
+  paths:
+    - node_modules/
+
+before_script:
+  - npm install
+
+test:
+  stage: test
+  script:
+    - npm test
+
+deploy:
+  stage: deploy
+  script:
+    - docker-compose up --build -d
